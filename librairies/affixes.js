@@ -89,6 +89,48 @@ function getAffixByWeek(weekNumber) {
     return new Affix(affixLevel2, affixLevel4, affixLevel7, affixLevel10);
 }
 
+function allAffixesForAPI() {
+    var affixes = {};
+    exports.getAllAffixes()
+        .flatMap(a => a.affixes.map(b => Object.assign({level: a.fromLevel}, b)))
+        .forEach(a => affixes[a.id] = a);
+        
+
+    return affixes;
+}
+
+exports.getAffixesForAPI = function() {
+    var closestWednesday = getClosestWednesday();
+    var result = getWeekNumber(closestWednesday);
+
+    var functionResult = [];
+    var allAffxes = allAffixesForAPI();
+    for (i = 0; i < 6; i++) {
+        var affixDate = new Date(closestWednesday);
+        affixDate.setDate(affixDate.getDate() + (i * 7));
+        affixDate.setHours(0);
+        affixDate.setMinutes(0);
+        affixDate.setSeconds(0);
+        affixDate.setMilliseconds(0);
+        var currentAffixes = getAffixByWeek(result + i);
+        var affixes = [];
+        for (let a in currentAffixes) {
+            if (typeof a === 'string' && a.startsWith("level")) {
+                var affix = allAffxes[currentAffixes[a]];
+                affixes.push(affix);
+            }
+        }
+            
+        functionResult.push({
+            "date": affixDate, 
+            "week_offset": i,
+            "affixes": affixes,
+        });
+    }
+
+    return functionResult;
+};
+
 exports.getAffixes = function () {
     var closestWednesday = getClosestWednesday();
     var result = getWeekNumber(closestWednesday);

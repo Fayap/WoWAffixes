@@ -6,6 +6,7 @@ var server = require('./../server.js');
 describe('HTTP Server Test', function () {
     // The function passed to before() is called before running the test cases.
     before(function () {
+	console.log(server);
         server.listen(8989);
     });
 

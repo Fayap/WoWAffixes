@@ -6,6 +6,13 @@ function getRootUrl(req, res) {
   res.render('pages/index', { affixes: currentAffixes, affixesInfos: affixesLib.getAllAffixes(), moment: moment })
 }
 
+function api_show_week(req, res) {
+  var affixesLib = require('./affixes');
+
+  var affixes = affixesLib.getAffixesForAPI();
+  res.json(affixes);
+}
+
 function get404Url(req, res) {
   var affixesLib = require('./affixes');
   var moment = require('moment');
@@ -13,6 +20,7 @@ function get404Url(req, res) {
   res.render('pages/index', { affixes: affixesLib.getAffixes(), moment: moment })
 }
 
+exports.api_show_week = api_show_week
 exports.getRoutes = function (req, res, i18n) {
   var result;
   if (req.baseUrl === '') {

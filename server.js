@@ -31,7 +31,8 @@ var server = express()
   .use(favicon(path.join(__dirname, 'public', 'images/favicon.png')))
   .set('views', path.join(__dirname, 'views'))
   .set('view engine', 'ejs')
-  .get('/', (req, res) => routesLib.getRoutes(req, res, i18n));
+  .get('/', (req, res) => routesLib.getRoutes(req, res, i18n))
+  .get('/api/weeks/', routesLib.api_show_week);
 
 exports.listen = function(port) {
 	console.log('Listening on: ' + port);
