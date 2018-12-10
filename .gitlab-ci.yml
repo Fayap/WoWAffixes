@@ -1,0 +1,16 @@
+image: docker:latest
+
+services:
+  - docker:dind
+
+before_script:
+  - docker info
+
+deploy:
+  script:
+    - tag=latest
+    - docker login -u $CI_REGISTRY_USER -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker pull "${CI_REGISTRY_IMAGE}:${tag}" || true
+    - docker build -t "${CI_REGISTRY_IMAGE}:${tag}" .
+    - docker push "${CI_REGISTRY_IMAGE}:${tag}"
+
